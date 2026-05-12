@@ -59,7 +59,7 @@ def _build_spine(df: pd.DataFrame) -> pd.DataFrame:
     """Return a DataFrame of every Monday covering the full date range of df."""
     earliest = df["start_date_local"].min()
     latest   = df["start_date_local"].max()
-    mondays  = pd.date_range(
+    mondays  = pd.date_range(  # pylint: disable=no-member
         start=earliest.to_period("W-SUN").start_time,
         end=latest.to_period("W-SUN").start_time,
         freq="W-MON",

@@ -21,6 +21,12 @@ pytest = "^8.0"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
+[tool.pylint.messages_control]
+disable = ["C0114", "C0115", "C0116", "R0903", "R0801"]
+
+[tool.pylint.format]
+max-line-length = 110
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

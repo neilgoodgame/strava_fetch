@@ -20,7 +20,7 @@ def _capture_auth_code() -> str:
     captured: dict[str, str] = {}
 
     class _Handler(BaseHTTPRequestHandler):
-        def do_GET(self):
+        def do_GET(self):  # pylint: disable=invalid-name
             logger.debug("Incoming request path: %s", self.path)
             params = parse_qs(urlparse(self.path).query)
             logger.debug("Parsed params: %s", params)
@@ -73,9 +73,12 @@ def run_auth_flow(client_id: str, client_secret: str, token_file: str) -> None:
 
     code = _capture_auth_code()
     print("Auth code received, exchanging for tokens...")
-    logger.debug("POST payload: client_id=%s secret=%s... code=%s...", client_id, client_secret[:8], code[:8])
+    logger.debug(
+        "POST payload: client_id=%s secret=%s... code=%s...",
+        client_id, client_secret[:8], code[:8],
+    )
 
-    resp = requests.post(STRAVA_TOKEN_URL, data={
+    resp = requests.post(STRAVA_TOKEN_URL, timeout=30, data={
         "client_id":     int(client_id),
         "client_secret": client_secret,
         "code":          code,
@@ -98,7 +101,7 @@ def get_access_token(client_id: str, client_secret: str, token_file: str) -> str
 
 
 def _save_tokens(tokens: dict, token_file: str) -> None:
-    with open(token_file, "w") as f:
+    with open(token_file, "w", encoding="utf-8") as f:
         json.dump(tokens, f, indent=2)
     logger.debug("Tokens saved to %s", token_file)
     print(f"Tokens saved to {token_file}")
@@ -106,20 +109,20 @@ def _save_tokens(tokens: dict, token_file: str) -> None:
 
 def _load_tokens(token_file: str) -> dict:
     try:
-        with open(token_file) as f:
+        with open(token_file, encoding="utf-8") as f:
             return json.load(f)
-    except FileNotFoundError:
+    except FileNotFoundError as exc:
         raise FileNotFoundError(
             f"No token file found at {token_file}. "
             "Run with --auth first to authorise."
-        )
+        ) from exc
 
 
 def _refresh_if_needed(tokens: dict, client_id: str, client_secret: str, token_file: str) -> dict:
     if tokens.get("expires_at", 0) > time.time() + 60:
         return tokens
     print("Access token expired — refreshing...")
-    resp = requests.post(STRAVA_TOKEN_URL, data={
+    resp = requests.post(STRAVA_TOKEN_URL, timeout=30, data={
         "client_id":     int(client_id),
         "client_secret": client_secret,
         "grant_type":    "refresh_token",

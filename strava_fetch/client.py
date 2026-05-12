@@ -30,6 +30,7 @@ def fetch_all_activities(
             f"{STRAVA_API_BASE}/athlete/activities",
             headers=headers,
             params=params,
+            timeout=30,
         )
         resp.raise_for_status()
         batch: list[dict] = resp.json()

@@ -17,9 +17,13 @@ strava-fetch = "strava_fetch.__main__:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"
+black = "^25.0"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.black]
+line-length = 110
 
 [tool.pylint.messages_control]
 disable = ["C0114", "C0115", "C0116", "R0903", "R0801"]

@@ -67,11 +67,19 @@ class TestBuildWeeklySummary:
         result = build_weekly_summary(pd.DataFrame())
         assert result.empty
         assert set(result.columns) == {
-            "week_start", "week_end",
-            "num_run_activities", "total_run_distance_km", "total_run_time",
-            "avg_run_pace_min_per_km", "avg_run_hr_bpm", "longest_run_km",
-            "num_cycling_activities", "total_cycling_distance_km",
-            "total_cycling_time", "avg_cycling_power_w", "avg_cycling_hr_bpm",
+            "week_start",
+            "week_end",
+            "num_run_activities",
+            "total_run_distance_km",
+            "total_run_time",
+            "avg_run_pace_min_per_km",
+            "avg_run_hr_bpm",
+            "longest_run_km",
+            "num_cycling_activities",
+            "total_cycling_distance_km",
+            "total_cycling_time",
+            "avg_cycling_power_w",
+            "avg_cycling_hr_bpm",
         }
 
     def test_single_run_week(self):

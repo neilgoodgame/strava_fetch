@@ -10,7 +10,7 @@ STRAVA_API_BASE = "https://www.strava.com/api/v3"
 
 def fetch_all_activities(
     access_token: str,
-    after:  datetime | None = None,
+    after: datetime | None = None,
     before: datetime | None = None,
 ) -> list[dict]:
     """Page through /athlete/activities and return all results."""
@@ -20,7 +20,7 @@ def fetch_all_activities(
 
     params: dict = {"per_page": 100}
     if after:
-        params["after"]  = int(after.timestamp())
+        params["after"] = int(after.timestamp())
     if before:
         params["before"] = int(before.timestamp())
 
@@ -47,26 +47,26 @@ def to_dataframe(activities: list[dict]) -> pd.DataFrame:
     """Flatten key activity fields into a tidy DataFrame."""
     rows = [
         {
-            "id":               a.get("id"),
-            "name":             a.get("name"),
-            "type":             a.get("type"),
-            "sport_type":       a.get("sport_type"),
+            "id": a.get("id"),
+            "name": a.get("name"),
+            "type": a.get("type"),
+            "sport_type": a.get("sport_type"),
             "start_date_local": a.get("start_date_local"),
-            "distance_km":      round(a.get("distance", 0) / 1000, 3),
-            "duration_s":       a.get("elapsed_time"),
-            "moving_time_s":    a.get("moving_time"),
-            "elevation_m":      a.get("total_elevation_gain"),
-            "avg_hr":           a.get("average_heartrate"),
-            "max_hr":           a.get("max_heartrate"),
-            "avg_watts":        a.get("average_watts"),
-            "avg_speed_kph":    round(a.get("average_speed", 0) * 3.6, 3),
-            "max_speed_kph":    round(a.get("max_speed", 0) * 3.6, 3),
-            "kudos":            a.get("kudos_count"),
-            "suffer_score":     a.get("suffer_score"),
-            "trainer":          a.get("trainer"),
-            "commute":          a.get("commute"),
-            "gear_id":          a.get("gear_id"),
-            "strava_url":       f"https://www.strava.com/activities/{a.get('id')}",
+            "distance_km": round(a.get("distance", 0) / 1000, 3),
+            "duration_s": a.get("elapsed_time"),
+            "moving_time_s": a.get("moving_time"),
+            "elevation_m": a.get("total_elevation_gain"),
+            "avg_hr": a.get("average_heartrate"),
+            "max_hr": a.get("max_heartrate"),
+            "avg_watts": a.get("average_watts"),
+            "avg_speed_kph": round(a.get("average_speed", 0) * 3.6, 3),
+            "max_speed_kph": round(a.get("max_speed", 0) * 3.6, 3),
+            "kudos": a.get("kudos_count"),
+            "suffer_score": a.get("suffer_score"),
+            "trainer": a.get("trainer"),
+            "commute": a.get("commute"),
+            "gear_id": a.get("gear_id"),
+            "strava_url": f"https://www.strava.com/activities/{a.get('id')}",
         }
         for a in activities
     ]

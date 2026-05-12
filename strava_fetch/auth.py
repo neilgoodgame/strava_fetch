@@ -11,7 +11,7 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-STRAVA_AUTH_URL  = "https://www.strava.com/oauth/authorize"
+STRAVA_AUTH_URL = "https://www.strava.com/oauth/authorize"
 STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token"
 
 
@@ -59,13 +59,15 @@ def _capture_auth_code() -> str:
 
 def run_auth_flow(client_id: str, client_secret: str, token_file: str) -> None:
     """Open browser for Strava OAuth, capture the code, exchange for tokens."""
-    params = urlencode({
-        "client_id":       int(client_id),
-        "redirect_uri":    "http://localhost:8765",
-        "response_type":   "code",
-        "approval_prompt": "force",
-        "scope":           "activity:read_all",
-    })
+    params = urlencode(
+        {
+            "client_id": int(client_id),
+            "redirect_uri": "http://localhost:8765",
+            "response_type": "code",
+            "approval_prompt": "force",
+            "scope": "activity:read_all",
+        }
+    )
     url = f"{STRAVA_AUTH_URL}?{params}"
     logger.debug("Auth URL: %s", url)
     print(f"Opening browser for Strava authorisation...\n{url}\n")
@@ -75,15 +77,21 @@ def run_auth_flow(client_id: str, client_secret: str, token_file: str) -> None:
     print("Auth code received, exchanging for tokens...")
     logger.debug(
         "POST payload: client_id=%s secret=%s... code=%s...",
-        client_id, client_secret[:8], code[:8],
+        client_id,
+        client_secret[:8],
+        code[:8],
     )
 
-    resp = requests.post(STRAVA_TOKEN_URL, timeout=30, data={
-        "client_id":     int(client_id),
-        "client_secret": client_secret,
-        "code":          code,
-        "grant_type":    "authorization_code",
-    })
+    resp = requests.post(
+        STRAVA_TOKEN_URL,
+        timeout=30,
+        data={
+            "client_id": int(client_id),
+            "client_secret": client_secret,
+            "code": code,
+            "grant_type": "authorization_code",
+        },
+    )
     logger.debug("Token exchange response (%s): %s", resp.status_code, resp.text)
     if not resp.ok:
         print(f"Token exchange failed ({resp.status_code}): {resp.text}")
@@ -113,8 +121,7 @@ def _load_tokens(token_file: str) -> dict:
             return json.load(f)
     except FileNotFoundError as exc:
         raise FileNotFoundError(
-            f"No token file found at {token_file}. "
-            "Run with --auth first to authorise."
+            f"No token file found at {token_file}. " "Run with --auth first to authorise."
         ) from exc
 
 
@@ -122,12 +129,16 @@ def _refresh_if_needed(tokens: dict, client_id: str, client_secret: str, token_f
     if tokens.get("expires_at", 0) > time.time() + 60:
         return tokens
     print("Access token expired — refreshing...")
-    resp = requests.post(STRAVA_TOKEN_URL, timeout=30, data={
-        "client_id":     int(client_id),
-        "client_secret": client_secret,
-        "grant_type":    "refresh_token",
-        "refresh_token": tokens["refresh_token"],
-    })
+    resp = requests.post(
+        STRAVA_TOKEN_URL,
+        timeout=30,
+        data={
+            "client_id": int(client_id),
+            "client_secret": client_secret,
+            "grant_type": "refresh_token",
+            "refresh_token": tokens["refresh_token"],
+        },
+    )
     logger.debug("Token refresh response (%s): %s", resp.status_code, resp.text)
     if not resp.ok:
         print(f"Token refresh failed ({resp.status_code}): {resp.text}")

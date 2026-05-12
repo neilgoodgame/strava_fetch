@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "strava-fetch"
+version = "0.1.0"
+description = "Fetch and export Strava activity history"
+authors = ["Neil"]
+readme = "README.md"
+packages = [{include = "strava_fetch"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.33.1"
+pandas = "^3.0.2"
+pyarrow = "^24.0.0"
+
+[tool.poetry.scripts]
+strava-fetch = "strava_fetch.__main__:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

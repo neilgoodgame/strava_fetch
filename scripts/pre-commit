@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+STAGED_PY=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$' || true)
+[ -z "$STAGED_PY" ] && exit 0
+poetry run black $STAGED_PY
+git add $STAGED_PY
+poetry run pylint $STAGED_PY

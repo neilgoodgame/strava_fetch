@@ -1,5 +1,8 @@
 # strava-fetch
 
+[![Tests](https://github.com/neilgoodgame/strava_fetch/actions/workflows/tests.yml/badge.svg)](https://github.com/neilgoodgame/strava_fetch/actions/workflows/tests.yml)
+[![Pylint](https://github.com/neilgoodgame/strava_fetch/actions/workflows/pylint.yml/badge.svg)](https://github.com/neilgoodgame/strava_fetch/actions/workflows/pylint.yml)
+
 Fetch your Strava activity history and export to CSV or Parquet.
 
 ## Setup

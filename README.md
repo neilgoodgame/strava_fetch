@@ -55,6 +55,37 @@ poetry run strava-fetch --out my_activities.csv
 | `--before YYYY-MM-DD` | Only fetch activities before this date |
 | `--format csv\|parquet` | Output format (default: `csv`) |
 | `--out FILE` | Output file path (auto-generated if omitted) |
+| `--no-weekly` | Skip the weekly run summary export |
+| `--debug` | Enable debug logging |
+
+## Development
+
+### Install dev dependencies
+
+```bash
+poetry install --with dev
+```
+
+### Install git hooks
+
+The pre-commit hook runs black (auto-format) and pylint before every commit.
+
+```bash
+sh scripts/install-hooks.sh
+```
+
+### Run tests
+
+```bash
+poetry run pytest
+```
+
+### Lint and format manually
+
+```bash
+poetry run pylint $(git ls-files '*.py')
+poetry run black strava_fetch/ tests/
+```
 
 ## Project structure
 

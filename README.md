@@ -80,6 +80,8 @@ sh scripts/install-hooks.sh
 poetry run pytest
 ```
 
+Tests also run automatically on every push via GitHub Actions.
+
 ### Lint and format manually
 
 ```bash
